@@ -1,7 +1,6 @@
 local test = require( "test" )
 local fs   = require( "filesystem" )
 
-
 local function _tostring()
     local p1 = fs.path( "/home/foo/" )
 
@@ -433,4 +432,5 @@ local tests =
     elements            = _elements
 }
 
-return tests
+local test_to_run = ...
+test.run_test_function(test_to_run, tests[ test_to_run ])

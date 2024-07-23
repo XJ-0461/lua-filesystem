@@ -1,0 +1,293 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "displayName": "Default Config"
+    },
+    {
+      "name": "windows",
+      "hidden": true,
+      "inherits": "default",
+      "displayName": "Windows-only configuration",
+      "description": "This build is only available on Windows",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-windows"
+        }
+      }
+    },
+    {
+      "name": "linux",
+      "hidden": true,
+      "inherits": "default",
+      "displayName": "Linux-only configuration",
+      "description": "This build is only available on Linux",
+      "generator": "Ninja",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-linux"
+        }
+      }
+    },
+    {
+      "name": "macOS",
+      "hidden": true,
+      "inherits": "default",
+      "displayName": "macOS-only configuration",
+      "description": "This build is only available on macOS",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "displayName": "Debug",
+      "description": "Base debug configuration",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Debug"
+        }
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "displayName": "Release",
+      "description": "Base release configuration",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Release"
+        }
+      }
+    },
+    {
+      "name": "release with debug info",
+      "hidden": true,
+      "displayName": "Release with Debug Info",
+      "description": "Base release with debug info configuration",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "RelWithDebInfo"
+        }
+      }
+    },
+    {
+      "name": "minsize release",
+      "hidden": true,
+      "displayName": "MinSizeRel",
+      "description": "Base minimum size release configuration",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "MinSizeRel"
+        }
+      }
+    },
+    {
+      "name": "lua-version-5.3.5",
+      "hidden": true,
+      "displayName": "Use Lua 5.3.5",
+      "description": "Use Lua 5.3.5",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_lua_Auto_Fetch": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_Version": {
+          "type": "STRING",
+          "value": "5.3.5#7"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_LibraryLinkage": {
+          "type": "STRING",
+          "value": "dynamic"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_Features": {
+          "type": "STRING",
+          "value": "tools"
+        }
+      }
+    },
+    {
+      "name": "lua-version-5.4.6",
+      "hidden": true,
+      "displayName": "Use Lua 5.4.6",
+      "description": "Use Lua 5.4.6",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_lua_Auto_Fetch": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_Version": {
+          "type": "STRING",
+          "value": "5.1.5"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_LibraryLinkage": {
+          "type": "STRING",
+          "value": "dynamic"
+        },
+        "LuaFilesystem_ExternalDependency_lua_Auto_Features": {
+          "type": "STRING",
+          "value": "tools"
+        }
+      }
+    },
+    {
+      "name": "linux-mingw32-toolchain",
+      "hidden": true,
+      "inherits": ["default", "linux"],
+      "displayName": "Linux MinGW32 Toolchain",
+      "description": "Use the MinGW32 toolchain while building on Linux",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_ChainLoadToolchainFilepath": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/cmake/toolchain/mingw32-toolchain.cmake"
+        }
+      }
+    },
+    {
+      "name": "linux-mingw64-toolchain",
+      "hidden": true,
+      "inherits": ["default", "linux"],
+      "displayName": "Linux MinGW64 Toolchain",
+      "description": "Use the MinGW64 toolchain while building on Linux",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_ChainLoadToolchainFilepath": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/cmake/toolchain/mingw64-toolchain.cmake"
+        }
+      }
+    },
+    {
+      "name": "linux debug",
+      "inherits": ["linux", "debug"],
+      "displayName": "Linux Debug",
+      "description": "Basic Linux Debug configuration",
+      "binaryDir": "${sourceDir}/build/linux-debug",
+      "installDir": "${sourceDir}/build/linux-debug/install"
+    },
+    {
+      "name": "linux release",
+      "inherits": ["linux", "release"],
+      "displayName": "Linux Release",
+      "description": "Basic Linux Release configuration",
+      "binaryDir": "${sourceDir}/build/linux-release",
+      "installDir": "${sourceDir}/build/linux-release/install"
+    },
+    {
+      "name": "linux debug external-dependencies",
+      "hidden": true,
+      "inherits": ["linux", "debug"],
+      "displayName": "Linux Debug with External Dependencies",
+      "description": "Linux Debug configuration and fetch and build external dependencies locally",
+      "binaryDir": "${sourceDir}/build/linux-debug-external-dependencies",
+      "installDir": "${sourceDir}/build/linux-debug-external-dependencies/install",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-linux-dynamic"
+        }
+      }
+    },
+    {
+      "name": "linux release external-dependencies",
+      "hidden": true,
+      "inherits": ["linux", "release"],
+      "displayName": "Linux Release with External Dependencies",
+      "description": "Linux Release configuration and fetch and build external dependencies locally",
+      "binaryDir": "${sourceDir}/build/linux-release-external-dependencies",
+      "installDir": "${sourceDir}/build/linux-release-external-dependencies/install",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-linux-dynamic"
+        }
+      }
+    },
+    {
+      "name": "linux debug external-dependencies lua-5.3.5",
+      "inherits": ["linux debug external-dependencies", "lua-version-5.3.5"],
+      "displayName": "Linux Debug with External Dependencies (Lua 5.3.5)",
+      "description": "Linux Debug configuration and fetch and build external dependencies locally (Lua 5.3.5)",
+      "binaryDir": "${sourceDir}/build/linux-debug-external-dependencies-lua-5_3",
+      "installDir": "${sourceDir}/build/linux-debug-external-dependencies-lua-5_3/install"
+    },
+    {
+      "name": "linux release external-dependencies lua-5.3.5",
+      "inherits": ["linux release external-dependencies", "lua-version-5.3.5"],
+      "displayName": "Linux Release with External Dependencies (Lua 5.3.5)",
+      "description": "Linux Release configuration and fetch and build external dependencies locally (Lua 5.3.5)",
+      "binaryDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_3",
+      "installDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_3/install"
+    },
+    {
+      "name": "linux debug external-dependencies lua-5.4.6",
+      "inherits": ["linux debug external-dependencies", "lua-version-5.4.6"],
+      "displayName": "Linux Debug with External Dependencies (Lua 5.4.6)",
+      "description": "Linux Debug configuration and fetch and build external dependencies locally (Lua 5.4.6)",
+      "binaryDir": "${sourceDir}/build/linux-debug-external-dependencies-lua-5_4",
+      "installDir": "${sourceDir}/build/linux-debug-external-dependencies-lua-5_4/install"
+    },
+    {
+      "name": "linux release external-dependencies lua-5.4.6",
+      "inherits": ["linux release external-dependencies", "lua-version-5.4.6"],
+      "displayName": "Linux Release with External Dependencies (Lua 5.4.6)",
+      "description": "Linux Release configuration and fetch and build external dependencies locally (Lua 5.4.6)",
+      "binaryDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_4",
+      "installDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_4/install"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Linux Debug",
+      "configurePreset": "linux debug"
+    },
+    {
+      "name": "Linux Release",
+      "configurePreset": "linux release"
+    },
+    {
+      "name": "Linux Debug Lua5.3",
+      "configurePreset": "linux debug external-dependencies lua-5.3.5"
+    },
+    {
+      "name": "Linux Release Lua5.3",
+      "configurePreset": "linux release external-dependencies lua-5.3.5"
+    },
+    {
+      "name": "Linux Debug Lua5.4",
+      "configurePreset": "linux debug external-dependencies lua-5.4.6"
+    },
+    {
+      "name": "Linux Release Lua5.4",
+      "configurePreset": "linux release external-dependencies lua-5.4.6"
+    }
+  ],
+  "testPresets": [],
+  "packagePresets": [],
+  "workflowPresets": []
+}

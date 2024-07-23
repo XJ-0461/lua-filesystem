@@ -26,8 +26,8 @@ local function _replace_filename()
 end
 
 local function _refresh_exists()
-    local src = "./test/tests/foo/file.txt"
-    local dst = fs.path( "./test/tests/foo/file.xtx" )
+    local src = "./resources/foo/file.txt"
+    local dst = fs.path( "./resources/foo/file.xtx" )
 
     local de = fs.directory_entry( dst )
     test.is_false( de:exists() )
@@ -51,39 +51,39 @@ local function _path()
 end
 
 local function _is_xyz()
-    local de = fs.directory_entry( "./test/tests/foo/" )
+    local de = fs.directory_entry( "./resources/foo/" )
     test.is_false( de:is_block_file() )
     test.is_false( de:is_character_file() )
     test.is_true( de:is_directory() )
     test.is_false( de:is_fifo() )
     test.is_false( de:is_other() )
 
-    de:assign( "./test/tests/foo/file.txt" )
+    de:assign( "./resources/foo/file.txt" )
     test.is_true( de:is_regular_file() )
     test.is_false( de:is_socket() )
     test.is_false( de:is_symlink() )
 end
 
 local function _file_size()
-    local de = fs.directory_entry( "./test/tests/foo/file.txt" )
+    local de = fs.directory_entry( "./resources/foo/file.txt" )
 
     test.is_true( de:file_size() > 0 )
 end
 
 local function _hard_link_count()
-    local de = fs.directory_entry( "./test/tests/foo/file.txt" )
+    local de = fs.directory_entry( "./resources/foo/file.txt" )
 
     test.is_true( de:hard_link_count() > 0 )
 end
 
 local function _last_write_time()
-    local de = fs.directory_entry( "./test/tests/foo/file.txt" )
+    local de = fs.directory_entry( "./resources/foo/file.txt" )
 
     test.is_true( fs.file_time_now() > de:last_write_time() )
 end
 
 local function _status()
-    local de = fs.directory_entry( "./test/tests/foo/file.txt" )
+    local de = fs.directory_entry( "./resources/foo/file.txt" )
 
     local perms, file_type = de:status()
 
@@ -92,8 +92,8 @@ local function _status()
 end
 
 local function _symlink_status()
-    local src = fs.path( "./test/tests/foo/file.txt" ):make_preferred()
-    local dst = fs.path( "./test/tests/foo/file.xtx" ):make_preferred()
+    local src = fs.path( "./resources/foo/file.txt" ):make_preferred()
+    local dst = fs.path( "./resources/foo/file.xtx" ):make_preferred()
 
     fs.create_symlink( src, dst )
 
@@ -120,4 +120,5 @@ local tests =
     symlink_status      = _symlink_status
 }
 
-return tests
+local test_to_run = ...
+test.run_test_function(test_to_run, tests[test_to_run])

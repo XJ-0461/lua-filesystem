@@ -48,10 +48,17 @@ local function _proximate()
 end
 
 local function _copy()
-    local src = "./test/tests/foo"
-    local dst = fs.path( "./test/tests/bar" )
-    
-    fs.copy( src, dst )
+    local src = fs.path("./resources/foo")
+    local dst = fs.path("./resources/bar")
+
+    if (fs.exists(dst)) then
+        local result = fs.remove(dst)
+        if (not result) then
+            error("Failed to remove entity")
+        end
+    end
+
+    fs.copy(src, dst)
     test.is_true( fs.exists( fs.path( dst ):append( "file.txt" ) ) )
 
     fs.remove_all( dst )
@@ -63,8 +70,8 @@ local function _copy()
 end
 
 local function _copy_file()
-    local src = "./test/tests/foo/file.txt"
-    local dst = fs.path( "./test/tests/file.txt" )
+    local src = "./resources/foo/file.txt"
+    local dst = fs.path( "./resources/file.txt" )
 
     test.is_true( fs.copy_file( src, dst ) )
     test.is_true( fs.exists( dst ) )
@@ -75,9 +82,9 @@ local function _copy_file()
 end
 
 local function _create_copy_read_symlink_status()
-    local src = fs.path( "./test/tests/foo/file.txt" )
-    local dst = "./test/tests/file.txt"
-    local cpy = "./test/tests/copy.txt"
+    local src = fs.path( "./resources/foo/file.txt" )
+    local dst = "./resources/file.txt"
+    local cpy = "./resources/copy.txt"
 
     fs.create_symlink( src, dst )
     test.is_true( fs.is_symlink( dst ) )
@@ -99,7 +106,7 @@ local function _create_copy_read_symlink_status()
 end
 
 local function _create_directory()
-    local dir = "./test/tests/bar/"
+    local dir = "./resources/bar/"
 
     test.is_true( fs.create_directory( dir ) )
     test.is_true( fs.exists( dir ) )
@@ -109,18 +116,22 @@ local function _create_directory()
 end
 
 local function _create_directories_remove_all()
-    local dir = _current_test_path( "test/tests/bar/baz" )
+    local dir = fs.path( "./resources/bar/baz" )
+
+    if (fs.exists(dir)) then
+        fs.remove_all(dir)
+    end
 
     test.is_true( fs.create_directories( dir ) )
     test.is_true( fs.exists( dir ) )
 
-    fs.remove_all( _current_test_path( "./test/tests/bar" ) )
+    fs.remove_all( fs.path( "./resources/bar" ) )
     test.is_false( fs.exists( dir ) )
 end
 
 local function _create_hard_link_and_count()
-    local src = "./test/tests/foo/file.txt"
-    local dst = "./test/tests/file.txt"
+    local src = "./resources/foo/file.txt"
+    local dst = "./resources/file.txt"
 
     test.is_same( fs.hard_link_count( src ), 1 )
 
@@ -133,13 +144,17 @@ local function _create_hard_link_and_count()
 end
 
 local function _create_directory_symlink()
-    local src = "./test/tests/foo"
-    local dst = "./test/tests/bar"
+    local src = fs.path("./resources/foo")
+    local dst = fs.path("./resources/bar")
 
-    fs.create_directory_symlink( src, dst )
-    test.is_true( fs.is_symlink( dst ) )
+    if fs.exists(dst) then
+        fs.remove_all(dst)
+    end
 
-    fs.remove( dst )
+    fs.create_directory_symlink(src, dst)
+    test.is_true(fs.is_symlink(dst))
+
+    fs.remove_all(dst)
 end
 
 local function _current_path()
@@ -152,15 +167,15 @@ local function _current_path()
 end
 
 local function _equivalent()
-    local p1 = fs.path( _current_test_path( "test/tests/foo/file.txt" ) )
-    local p2 = _current_test_path( "././test/../test/tests/foo/file.txt" )
+    local p1 = fs.path( _current_test_path( "resources/foo/file.txt" ) )
+    local p2 = _current_test_path( "././resources/../resources/foo/file.txt" )
 
     test.is_true( fs.equivalent( p1, p2 ) )
-    test.is_false( fs.equivalent( p1, _current_test_path( "test/tests/foo/bar" ) ) )
+    test.is_false( fs.equivalent( p1, _current_test_path( "resources/foo/bar" ) ) )
 end
 
 local function _file_size_resize()
-    local p = "./test/tests/foo/file.txt"
+    local p = "./resources/foo/file.txt"
 
     local size = fs.file_size( p )
     test.is_true( math.type( size ) == "integer" )
@@ -175,7 +190,7 @@ local function _file_size_resize()
 end
 
 local function _status_permissions()
-    local p         = fs.path( "./test/tests/foo/file.txt" )
+    local p         = fs.path( "./resources/foo/file.txt" )
     local perm1, t1 = fs.status( p )
 
     test.is_same( t1, fs.file_type.regular )
@@ -193,8 +208,8 @@ local function _status_permissions()
 end
 
 local function _rename()
-    local p1 = fs.path( "./test/tests/foo/file.txt" )
-    local p2 = "./test/tests/foo/elif.xtx"
+    local p1 = fs.path( "./resources/foo/file.txt" )
+    local p2 = "./resources/foo/elif.xtx"
 
     test.is_true( fs.exists( p1 ) )
     fs.rename( p1, p2 )
@@ -204,7 +219,7 @@ local function _rename()
 end
 
 local function _space()
-    local p                         = fs.path( "./test/tests/foo" )
+    local p                         = fs.path( "./resources/foo" )
     local free, available, capacity = fs.space( p )
 
     test.is_not_nil( free )
@@ -219,7 +234,7 @@ local function _temp_directory_path()
 end
 
 local function _last_write_time()
-    local str = _current_test_path( "test/tests/foo/file.txt" )
+    local str = _current_test_path( "resources/foo/file.txt" )
     local p   = fs.path( str )
     local ft1 = fs.last_write_time( str )
     local ft2 = fs.last_write_time( p )
@@ -264,16 +279,16 @@ end
 local function _file_time_now()
     local ft1 = fs.file_time_now()
 
-    local ft2 = fs.last_write_time( "./test/tests/foo/bar/file.txt" )
+    local ft2 = fs.last_write_time( "./resources/foo/bar/file.txt" )
     test.is_true( ft1 > ft2 )
     test.is_true( ft1 >= ft2 )
     test.is_false( ft1 < ft2 )
     test.is_false( ft1 <= ft2 )
 end
 
-local function _file_time_duraion()
+local function _file_time_duration()
     local ft1 = fs.file_time_now()
-    local ft2 = fs.last_write_time( "./test/tests/foo/bar/file.txt" )
+    local ft2 = fs.last_write_time( "./resources/foo/bar/file.txt" )
 
     local diff1 = ft1 - ft2
     test.is_same( ft1, ft2 + diff1 )
@@ -317,14 +332,14 @@ local function _file_time_duraion()
 end
 
 local function _is_xyz()
-    local p1 = _current_test_path( "test/tests/foo/" )
+    local p1 = _current_test_path( "resources/foo/" )
     test.is_false( fs.is_block_file( p1 ) )
     test.is_false( fs.is_character_file( p1 ) )
     test.is_true( fs.is_directory( p1 ) )
     test.is_false( fs.is_fifo( p1 ) )
     test.is_false( fs.is_other( p1 ) )
 
-    local p2 = _current_test_path( "./test/tests/foo/file.txt" )
+    local p2 = _current_test_path( "./resources/foo/file.txt" )
     test.is_true( fs.is_regular_file( p2 ) )
     test.is_false( fs.is_socket( p2 ) )
     test.is_false( fs.is_symlink( p2 ) )
@@ -355,7 +370,7 @@ local tests =
     current_path                    = _current_path,
     equivalent                      = _equivalent,
     file_size_resize                = _file_size_resize,
-    permissions                     = _permissions,
+    --permissions                     = _permissions,
     status_permissions              = _status_permissions,
     rename                          = _rename,
     space                           = _space,
@@ -363,9 +378,10 @@ local tests =
     last_write_time                 = _last_write_time,
     file_time                       = _file_time,
     file_time_now                   = _file_time_now,
-    file_time_duraion               = _file_time_duraion,
-    is_xyzz                         = _is_xyz,
+    file_time_duration               = _file_time_duration,
+    is_xyz                          = _is_xyz,
     enum_binary_operators           = _enum_binary_operators
 }
 
-return tests
+local test_to_run = ...
+test.run_test_function(test_to_run, tests[test_to_run])

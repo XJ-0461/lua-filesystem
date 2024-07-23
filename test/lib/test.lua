@@ -27,9 +27,9 @@ local _failed_checks = 0
 local function _report_fail( ... )
     _failed_checks = _failed_checks + 1
     local msg         = string.format( ... )
-    local stack       = debug.traceback( msg, 3 )
-    local start, stop = string.find( stack, "[%s%c]+%C+run_test_modules" )
-    print( string.sub( stack, 1, start - 1 ) )
+    --local stack       = debug.traceback( msg, 3 )
+    --local start, stop = string.find( stack, "[%s%c]+%C+run_test_modules" )
+    print( msg )
 end
 
 function test.is_not_nil( value )
@@ -86,6 +86,20 @@ function test.is_not_same( value_1, value_2 )
         return false
     end
     return true
+end
+
+function test.run_test_function(function_name, f)
+    print( "Running test: " .. function_name )
+    if f == nil then
+        error("Test not found: " .. function_name)
+    end
+    _failed_checks = 0
+    assert( type( f ) == "function" )
+    f()
+    if (_failed_checks ~= 0) then
+        error("Test failed: " .. function_name)
+    end
+    print( "Test passed: " .. function_name )
 end
 
 function test.run_test_modules( test_modules )
