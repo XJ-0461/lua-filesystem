@@ -259,6 +259,84 @@
       "description": "Linux Release configuration and fetch and build external dependencies locally (Lua 5.4.6)",
       "binaryDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_4",
       "installDir": "${sourceDir}/build/linux-release-external-dependencies-lua-5_4/install"
+    },
+    {
+      "name": "windows debug",
+      "inherits": ["windows", "debug"],
+      "displayName": "Windows Debug",
+      "description": "Basic Windows Debug configuration",
+      "binaryDir": "${sourceDir}/build/windows-debug",
+      "installDir": "${sourceDir}/build/windows-debug/install"
+    },
+    {
+      "name": "windows release",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows Release",
+      "description": "Basic Windows Release configuration",
+      "binaryDir": "${sourceDir}/build/windows-release",
+      "installDir": "${sourceDir}/build/windows-release/install"
+    },
+    {
+      "name": "windows debug external-dependencies",
+      "hidden": true,
+      "inherits": ["windows", "debug"],
+      "displayName": "Windows Debug with External Dependencies",
+      "description": "Windows Debug configuration and fetch and build external dependencies locally",
+      "binaryDir": "${sourceDir}/build/windows-debug-external-dependencies",
+      "installDir": "${sourceDir}/build/windows-debug-external-dependencies/install",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-windows"
+        }
+      }
+    },
+    {
+      "name": "windows release external-dependencies",
+      "hidden": true,
+      "inherits": ["windows", "release"],
+      "displayName": "Windows Release with External Dependencies",
+      "description": "Windows Release configuration and fetch and build external dependencies locally",
+      "binaryDir": "${sourceDir}/build/windows-release-external-dependencies",
+      "installDir": "${sourceDir}/build/windows-release-external-dependencies/install",
+      "cacheVariables": {
+        "LuaFilesystem_ExternalDependency_Auto_DefaultTriplet": {
+          "type": "STRING",
+          "value": "x64-windows"
+        }
+      }
+    },
+    {
+      "name": "windows debug external-dependencies lua-5.3.5",
+      "inherits": ["windows debug external-dependencies", "lua-version-5.3.5"],
+      "displayName": "Windows Debug with External Dependencies (Lua 5.3.5)",
+      "description": "Windows Debug configuration and fetch and build external dependencies locally (Lua 5.3.5)",
+      "binaryDir": "${sourceDir}/build/windows-debug-external-dependencies-lua-5_3",
+      "installDir": "${sourceDir}/build/windows-debug-external-dependencies-lua-5_3/install"
+    },
+    {
+      "name": "windows release external-dependencies lua-5.3.5",
+      "inherits": ["windows release external-dependencies", "lua-version-5.3.5"],
+      "displayName": "Windows Release with External Dependencies (Lua 5.3.5)",
+      "description": "Windows Release configuration and fetch and build external dependencies locally (Lua 5.3.5)",
+      "binaryDir": "${sourceDir}/build/windows-release-external-dependencies-lua-5_3",
+      "installDir": "${sourceDir}/build/windows-release-external-dependencies-lua-5_3/install"
+    },
+    {
+      "name": "windows debug external-dependencies lua-5.4.6",
+      "inherits": ["windows debug external-dependencies", "lua-version-5.4.6"],
+      "displayName": "Windows Debug with External Dependencies (Lua 5.4.6)",
+      "description": "Windows Debug configuration and fetch and build external dependencies locally (Lua 5.4.6)",
+      "binaryDir": "${sourceDir}/build/windows-debug-external-dependencies-lua-5_4",
+      "installDir": "${sourceDir}/build/windows-debug-external-dependencies-lua-5_4/install"
+    },
+    {
+      "name": "windows release external-dependencies lua-5.4.6",
+      "inherits": ["windows release external-dependencies", "lua-version-5.4.6"],
+      "displayName": "Windows Release with External Dependencies (Lua 5.4.6)",
+      "description": "Windows Release configuration and fetch and build external dependencies locally (Lua 5.4.6)",
+      "binaryDir": "${sourceDir}/build/windows-release-external-dependencies-lua-5_4",
+      "installDir": "${sourceDir}/build/windows-release-external-dependencies-lua-5_4/install"
     }
   ],
   "buildPresets": [
@@ -285,6 +363,30 @@
     {
       "name": "Linux Release Lua5.4",
       "configurePreset": "linux release external-dependencies lua-5.4.6"
+    },
+    {
+      "name": "Windows Debug",
+      "configurePreset": "windows debug"
+    },
+    {
+      "name": "Windows Release",
+      "configurePreset": "windows release"
+    },
+    {
+      "name": "Windows Debug Lua5.3",
+      "configurePreset": "windows debug external-dependencies lua-5.3.5"
+    },
+    {
+      "name": "Windows Release Lua5.3",
+      "configurePreset": "windows release external-dependencies lua-5.3.5"
+    },
+    {
+      "name": "Windows Debug Lua5.4",
+      "configurePreset": "windows debug external-dependencies lua-5.4.6"
+    },
+    {
+      "name": "Windows Release Lua5.4",
+      "configurePreset": "windows release external-dependencies lua-5.4.6"
     }
   ],
   "testPresets": [],

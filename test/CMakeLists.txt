@@ -22,15 +22,39 @@ endif()
 
 # Set up testing environment by copying over the testing dependencies
 
-CopyTargetFile(
-    TARGET lua-filesystem::lua-filesystem
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
+set(LuaFilesystem_TestBinaryDir_ "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "Where all of our test assets will be dumped")
+
+CopyTargetThing(
+    COMMAND_NAME "CopyLuaFilesystemLibraryForTests"
+    SOURCE
+        TARGET
+            PROPERTY TARGET_FILE
+            INPUT_TARGET lua-filesystem::lua-filesystem
+    DESTINATION
+        VARIABLE
+            INPUT_VARIABLE LuaFilesystem_TestBinaryDir_
 )
+
+# explicitly not supported when using CMAKE_CROSSCOMPILING
+if (NOT CMAKE_CROSSCOMPILING AND CMAKE_IMPORT_LIBRARY_SUFFIX)
+
+    CopyTargetThing(
+        COMMAND_NAME "CopyLuaFilesystemDependenciesForTests"
+        SOURCE
+            TARGET
+                PROPERTY "TARGET_RUNTIME_DLLS"
+                INPUT_TARGET lua-filesystem::lua-filesystem
+        DESTINATION
+            VARIABLE
+                INPUT_VARIABLE LuaFilesystem_TestBinaryDir_
+    )
+
+endif()
 
 file(
     INSTALL
         "${CMAKE_CURRENT_LIST_DIR}/resources/foo"
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/resources/"
+    DESTINATION "${LuaFilesystem_TestBinaryDir_}/resources/"
 )
 
 file(
@@ -40,7 +64,7 @@ file(
         "${CMAKE_CURRENT_LIST_DIR}/tests/directory_iterator.lua"
         "${CMAKE_CURRENT_LIST_DIR}/tests/non_member_functions.lua"
         "${CMAKE_CURRENT_LIST_DIR}/tests/path.lua"
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
+    DESTINATION "${LuaFilesystem_TestBinaryDir_}"
 )
 
 macro(MakeTestSuite)

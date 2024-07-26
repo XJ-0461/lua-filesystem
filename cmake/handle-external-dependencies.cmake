@@ -89,7 +89,7 @@ macro(HandleExternalDependencies)
             DEFAULT_TRIPLET ${LuaFilesystem_ExternalDependency_Auto_DefaultTriplet}
             ROOT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../external/cool-vcpkg/"
             CHAIN_LOAD_TOOLCHAIN ${LuaFilesystem_ExternalDependency_Auto_ChainLoadToolchainFilepath}
-            OVERLAY_PORT_LOCATIONS ${CMAKE_CURRENT_LIST_DIR}/myport/lua-5_3_5 # todo
+            OVERLAY_PORT_LOCATIONS ${CMAKE_CURRENT_LIST_DIR}/myport/lua_5_3_5_7 # todo
         )
 
         if (LuaFilesystem_ExternalDependency_lua_Auto_Fetch AND NOT is_using_manual_lua)

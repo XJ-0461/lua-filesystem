@@ -33,12 +33,8 @@ endif()
 
 # ---- Find dependencies ----
 
-if (LuaFilesystem_FetchExternalDependencies)
-    include(cmake/handle-external-dependencies.cmake)
-    HandleExternalDependencies()
-endif()
-
-find_package(unofficial-lua CONFIG REQUIRED)
+include(cmake/handle-external-dependencies.cmake)
+HandleExternalDependencies()
 
 # ---- Create Library ----
 
@@ -62,7 +58,7 @@ target_link_libraries(
 
 target_compile_features(
     lua-filesystem
-    INTERFACE
+    PRIVATE
     cxx_std_17
 )
 
@@ -124,6 +120,13 @@ install(
     "${CMAKE_CURRENT_BINARY_DIR}/lua-filesystem-config-version.cmake"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/lua-filesystem"
 )
+
+#add_custom_command(
+#    TARGET lua-filesystem::lua-filesystem
+#    POST_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:lua-filesystem::lua-filesystem> "${CMAKE_CURRENT_BINARY_DIR}/test"
+#    COMMAND_EXPAND_LISTS
+#)
 
 # ---- Testing ----
 

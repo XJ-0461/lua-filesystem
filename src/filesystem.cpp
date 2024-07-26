@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <string_view>
 #include <cassert>
+#include <utility>
 
 #if defined( _WIN32 )
 # define EXPORT __declspec( dllexport )
